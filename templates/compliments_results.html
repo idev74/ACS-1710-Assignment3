@@ -7,7 +7,21 @@ Compliments Results
 {% block content %}
 
 <!-- Your HTML code goes here! -->
+<h2>Hey {{users_name}}! Welcome to the compliment generator!</h2>
+<h4>Your source for a daily dose of flattery</h4>
 
-
+{% if wants_compliments == 'yes' %}
+    <p>Wow! You are quite</p>
+    {% for result in results %}
+    <ul>
+        <li>{{result}}</li>
+    </ul>
+    {% endfor %}
+    <p>Has anyone told you that today? Now they have.</p>
+{% elif wants_compliments == 'no' %}
+    <p>No compliments today? You'll come back tomorrow, surely.</p>
+{% else %}
+    <p>Invalid Input... No takers?</p>
+{% endif %}
 
 {% endblock %}
