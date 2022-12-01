@@ -202,7 +202,8 @@ API_KEY with a value that is the api key for your account. """
 API_KEY = os.getenv('API_KEY')
 print(API_KEY)
 
-TENOR_URL = 'https://api.tenor.com/v1/search'
+TENOR_URL = 'https://tenor.googleapis.com/v2/search'
+
 pp = PrettyPrinter(indent=4)
 
 @app.route('/gif_search', methods=['GET', 'POST'])
@@ -211,17 +212,27 @@ def gif_search():
     if request.method == 'POST':
         # TODO: Get the search query & number of GIFs requested by the user, store each as a 
         # variable
+        search_query = request.form.get('search_query')
+        quantity = request.form.get('quantity')
+
 
         response = requests.get(
             TENOR_URL,
             {
                 # TODO: Add in key-value pairs for:
                 # - 'q': the search query
+                'q': search_query,
                 # - 'key': the API key (defined above)
+                'key': API_KEY,
                 # - 'limit': the number of GIFs requested
+                'limit': quantity
             })
 
         gifs = json.loads(response.content).get('results')
+        print('--->')
+        print(json.loads(response.content).get('code'))
+        print(json.loads(response.content).get('error'))
+
 
         context = {
             'gifs': gifs
@@ -232,7 +243,9 @@ def gif_search():
         # list of data. The media property contains a 
         # list of media objects. Get the gif and use it's 
         # url in your template to display the gif. 
-        # pp.pprint(gifs)
+        print('**')
+        print(API_KEY, TENOR_URL, search_query, quantity)
+        pp.pprint(gifs)
 
         return render_template('gif_search.html', **context)
     else:
